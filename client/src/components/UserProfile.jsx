@@ -1,11 +1,17 @@
 // import React from 'react';
 import { LogOut } from "lucide-react"; 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/landing.css'
 import { FaUser } from "react-icons/fa";
+import AOS from 'aos';
 
 const UserProfile = ({ user, onLogout }) => {
   const [showDialog, setShowDialog] = useState(false);
+  
+  useEffect(() => {
+    AOS.refresh();
+  }, []);
+  
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchTrendData } from '../utils/api';
+import AOS from 'aos';
 
 const ReportTable = ({ data, onTrendData }) => {
   const [sortBy, setSortBy] = useState('category');
@@ -12,7 +13,23 @@ const ReportTable = ({ data, onTrendData }) => {
     if (showTrends && data.reportId) {
       loadTrendData();
     }
-  }, [showTrends, data.reportId]);
+    
+    // Refresh AOS animations
+    AOS.refresh();
+
+    // Add staggered animation to table rows
+    const addRowAnimations = () => {
+      const parameterCards = document.querySelectorAll('.parameter-card');
+      parameterCards.forEach((card, index) => {
+        card.setAttribute('data-aos', 'fade-up');
+        card.setAttribute('data-aos-delay', (150 + index * 50).toString());
+      });
+      AOS.refresh();
+    };
+    
+    // Small delay to ensure DOM elements are ready
+    setTimeout(addRowAnimations, 100);
+  }, [showTrends, data.reportId, filterBy, sortBy]);
 
   const loadTrendData = async () => {
     try {

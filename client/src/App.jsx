@@ -7,9 +7,12 @@ import {
   Route,
   Navigate,
   Link,
-  useNavigate
+  useNavigate,
+  useLocation
 } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import AOS from 'aos';
+import { refreshAnimations, checkPerformance } from './utils/animationUtils';
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from 'react-i18next';
 import AuthForm from "./components/AuthForm";
@@ -192,14 +195,14 @@ function Dashboard({ user, setUser }) {
 
       <main className="app-main">
         {!reportData && !loading && !error && (
-          <div className="welcome-dashboard-message">
-            <h2>{t('app.welcome')}, {user.firstName}!</h2>
-            <p>{t('dashboard.upload_first')}</p>
+          <div className="welcome-dashboard-message" data-aos="fade-down">
+            <h2 data-aos="slide-up-fade" data-aos-delay="100" className="animated-pulse">{t('app.welcome')}, {user.firstName}!</h2>
+            <p data-aos="slide-up-fade" data-aos-delay="300">{t('dashboard.upload_first')}</p>
           </div>
         )}
 
         {error && (
-          <div className="error-banner">
+          <div className="error-banner" data-aos="fade-in">
             <span>{error}</span>
             <button
               onClick={handleReset}
@@ -216,36 +219,55 @@ function Dashboard({ user, setUser }) {
           <FileUpload
             onFileProcessed={handleFileProcessed}
             onError={handleError}
+            data-aos="fade-up"
+            data-aos-delay="500"
           />
         )}
 
         {reportData && (
-          <div className="results-section">
-            <div className="results-header">
+          <div className="results-section" data-aos="fade-up">
+            <div className="results-header" data-aos="fade-down" data-aos-delay="100">
               <h2>📊 {t('reports.analysis_complete')}</h2>
               <button
                 onClick={handleReset}
                 className="btn-new-upload"
                 tabIndex={0}
                 aria-label={t('dashboard.upload_report')}
+                data-aos="zoom-in" 
+                data-aos-delay="300"
               >
                 {t('dashboard.upload_report')}
               </button>
             </div>
 
-            <ReportTable data={reportData} onTrendData={handleTrendData} />
+            <ReportTable data={reportData} onTrendData={handleTrendData} data-aos="fade-up" data-aos-delay="400" />
 
             {trendData && (
-              <TrendChart data={trendData} reportId={reportData.reportId} />
+              <TrendChart data={trendData} reportId={reportData.reportId} data-aos="fade-up" data-aos-delay="600" />
             )}
           </div>
         )}
       </main>
 
-      <FAQ />
-      <Footer />
+      <div data-aos="fade-up" data-aos-delay="200">
+        <FAQ />
+      </div>
+      <div data-aos="fade-up" data-aos-delay="300">
+        <Footer />
+      </div>
     </div>
   );
+}
+
+// RouteChangeTracker component to refresh animations on route changes
+function RouteChangeTracker() {
+  const location = useLocation();
+  
+  useEffect(() => {
+    refreshAnimations();
+  }, [location]);
+  
+  return null;
 }
 
 function App() {
@@ -253,6 +275,33 @@ function App() {
   const { loading } = useLoading();
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
+
+  // Initialize AOS for scroll animations with improved handling
+  useEffect(() => {
+    // Check for low-performance devices and disable animations if needed
+    checkPerformance();
+    
+    // Refresh animations on window resize with debounce for performance
+    const handleResize = () => {
+      refreshAnimations();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    
+    // Initial refresh
+    refreshAnimations();
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, []);
+
+  // Refresh animations on route change
+  useEffect(() => {
+    refreshAnimations();
+  }, [window.location.pathname]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -313,6 +362,7 @@ function App() {
 
   return (
     <Router>
+      <RouteChangeTracker />
       <div className="app">
         <Routes>
 

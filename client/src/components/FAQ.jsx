@@ -1,14 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { useTranslation } from 'react-i18next';
 import "../styles/FAQ.css";
+import AOS from 'aos';
 
 const FAQ = () => {
   const { t } = useTranslation();
   const [openIndex, setOpenIndex] = useState(null);
 
+  useEffect(() => {
+    AOS.refresh();
+  }, []);
+
   const toggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
+    // Refresh AOS animations when accordion toggles
+    setTimeout(() => {
+      AOS.refresh();
+    }, 100);
   };
 
   const faqEntries = [
@@ -35,12 +44,14 @@ const FAQ = () => {
   ];
 
   return (
-    <section className="faq-container">
-      <h2 >{t('faq.title')}</h2>
+    <section className="faq-container" data-aos="fade-up" data-aos-duration="800">
+      <h2 data-aos="fade-down" data-aos-delay="200">{t('faq.title')}</h2>
       {faqEntries.map((item, idx) => (
         <div
           key={idx}
           className={`faq-item ${openIndex === idx ? "open" : ""}`}
+          data-aos="fade-up"
+          data-aos-delay={300 + (idx * 100)}
         >
           <div
             className="faq-question"

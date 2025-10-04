@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import "../styles/ContactUs.css";
+import AOS from 'aos';
 
 
 const ContactUs = ({ user }) => {
@@ -23,6 +24,9 @@ const ContactUs = ({ user }) => {
     } else {
       document.body.classList.remove("dark-mode");
     }
+    
+    // Refresh AOS animations
+    AOS.refresh();
   }, [darkMode]);
 
   const handleInputChange = (e) => {
@@ -85,13 +89,13 @@ const ContactUs = ({ user }) => {
 
   return (
     <div className={`contact-page ${darkMode ? "dark" : ""}`}>
-      <div className="contact-container">
-        <div className="contact-form-wrapper">
+      <div className="contact-container" data-aos="fade-up" data-aos-duration="800">
+        <div className="contact-form-wrapper" data-aos="fade-up" data-aos-delay="200">
           {showSuccess ? (
-            <div className="success-container">
-              <div className="success-icon">✅</div>
-              <h2>Message Sent Successfully!</h2>
-              <p>
+            <div className="success-container" data-aos="zoom-in">
+              <div className="success-icon" data-aos="flip-left" data-aos-delay="300">✅</div>
+              <h2 data-aos="fade-up" data-aos-delay="400">Message Sent Successfully!</h2>
+              <p data-aos="fade-up" data-aos-delay="500">
                 Thank you for contacting us. We've received your message and
                 will get back to you via email soon.
               </p>
@@ -104,7 +108,7 @@ const ContactUs = ({ user }) => {
           ) : (
             <>
               <div className="contact-header">
-                <h2>Contact Us</h2>
+                <h2 data-aos="fade-down" data-aos-delay="200">Contact Us</h2>
                 <p>
                   Have questions or feedback? We'd love to hear from you!
                 </p>
@@ -117,7 +121,7 @@ const ContactUs = ({ user }) => {
                 </p>
               </div>
 
-              <form className="contact-form" onSubmit={handleSubmit}>
+                      <form onSubmit={handleSubmit} className="contact-form" data-aos="fade-up" data-aos-delay="300">
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
                   <input

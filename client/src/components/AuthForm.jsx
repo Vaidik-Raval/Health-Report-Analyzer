@@ -9,6 +9,7 @@ import GoogleButton from "react-google-button";
 import { auth, provider, signInWithPopup } from "./firebase.jsx";
 import DarkModeToggle from './DarkModeToggle';
 import LanguageSwitcher from './LanguageSwitcher';
+import AOS from 'aos';
 
 // SVG Icon for password visibility toggle
 const EyeIcon = ({ size = 20, color = "#6b7280" }) => (

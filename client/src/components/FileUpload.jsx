@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { uploadFile } from "../utils/api";
 import { useLoading } from "../context/LoadingContext";
+import AOS from 'aos';
 
 const FileUpload = ({ onFileProcessed, onError }) => {
   const [isDragOver, setIsDragOver] = useState(false);
@@ -25,6 +26,7 @@ const FileUpload = ({ onFileProcessed, onError }) => {
   // Clean up the timer when component unmounts
 
   useEffect(() => {
+    AOS.refresh();
     return () => resetProgress(); //ensure cleanup
   }, []);
 
@@ -234,9 +236,9 @@ const FileUpload = ({ onFileProcessed, onError }) => {
         style={{ display: "none" }}
       />
 
-      <div className="upload-tips">
-        <h4>📋 Tips for better results:</h4>
-        <ul>
+      <div className="upload-tips" data-aos="fade-up" data-aos-delay="400">
+        <h4 data-aos="fade-right" data-aos-delay="500">📋 Tips for better results:</h4>
+        <ul data-aos="fade-up" data-aos-delay="600">
           <li>Ensure the document is clear and well-lit</li>
           <li>Include the full lab report with parameter names and values</li>
           <li>Avoid blurry or skewed images</li>
