@@ -252,7 +252,7 @@ function Dashboard({ user, setUser }) {
       <div data-aos="fade-up" data-aos-delay="200">
         <FAQ />
       </div>
-      <div data-aos="fade-up" data-aos-delay="300">
+      <div>
         <Footer />
       </div>
     </div>
